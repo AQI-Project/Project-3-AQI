@@ -1,192 +1,124 @@
 <!DOCTYPE html>
+<meta charset="utf-8">
+
 <head>
-  <meta charset="utf-8">
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <style>
-    .axis .domain {
-      display: none;
-    }
-    form {
-      position: absolute;
-      right: 10px;
-      top: 10px;
-    }
-  </style>
+	<style>
+
+  .bar{
+    fill: steelblue;
+  }
+
+  .bar:hover{
+    fill: brown;
+  }
+
+	.axis {
+	  font: 10px sans-serif;
+	}
+
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+
+	</style>
 </head>
 
 <body>
-  <form>
-    <label><input type="radio" name="mode" value="grouped" checked> Grouped</label>
-    <label><input type="radio" name="mode" value="stacked"> Stacked</label>
-  </form>
-  <svg width="960" height="500"></svg>
-  <script>
+	
+<script src="https://d3js.org/d3.v3.min.js"></script>
 
-  var svg = d3.select("svg"),
-    margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = +svg.attr("width") - margin.left - margin.right,
-    height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+<script>
+// set the dimensions of the canvas
+var margin = {top: 20, right: 20, bottom: 70, left: 40},
+    width = 2000 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
 
-  var x0 = d3.scaleBand()
-  .rangeRound([0, width])
-  .paddingInner(0.05);
 
-  var x1 = d3.scaleBand()
-  .padding(0.05);
+// set the ranges
+var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
 
-  var y = d3.scaleLinear()
-  .rangeRound([height, 0]);
+var y = d3.scale.linear().range([height, 0]);
 
-  var z = d3.scaleOrdinal()
-  .range(["#98abc5", "#a05d56", "#d0743c", "#ff8c00"]);
+// define the axis
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
 
-  d3.csv('data1.csv', (error, data) => {
 
-    if (error) throw error;
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(10);
 
-    // Nest country values by city.
-    var dataByCity = d3.nest()
-        .key(d => { return d.city; })
-        .key(d => { return d.country; })
-        .rollup(v => {
-          return d3.sum(v, d => { return d.pollution; });
-        })
-        .entries(data);
 
-	  dataByCity.forEach( y => {
+// add the SVG element
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ")");
 
-      y.city = y.key;
-      delete y.key;
 
-      y.values.forEach(d => {
-        d.country = d.key;
-        d.sum_poll = +d.value;
-        delete d.key;
-        delete d.value;
-      });
+// load the data
+d3.json("data.json", function(error, data) {
 
-      y.values.sort( (a, b) => {
-        return b.sum_poll - a.sum_poll;
-      });
+  var data = data.filter(function(d){return d.status === 'success';});
+  console.log(data);
 
+  var dataY=[];
+  data.forEach(function(element) {
+    dataY.push(element.data);
+});
+  var current = dataY.filter(function(d){return d.current.pollution != null;});
+  console.log(current);
+
+    current.forEach(function(d) {
+        d.city = d.city;
+        d.current.pollution.aqius = +d.current.pollution.aqius;
     });
+	
+  // scale the range of the data
+  x.domain(current.map(function(d) { return d.city; }));
+  y.domain([0, d3.max(current, function(d) { return d.current.pollution.aqius; })]);
 
-    let countryList = dataByCity[0].values.map(d => { return d.country; });
-    let cityList = dataByCity.map(d => { return d.city; });
-
-    x0.domain(cityList);
-    x1.domain(countryList).rangeRound([0, x0.bandwidth()]);
-    y.domain([0, d3.max(dataByCity, d => {return d3.max(d.values, el => { return el.sum_poll; }); })]).nice();
-    z.domain(countryList);
-
-    var city = g.append("g")
-    .selectAll("g")
-    .data(dataByCity)
-    .enter().append("g")
-    .attr("transform", d => { return "translate(" + x0(d.city) + ",0)"; })
-
-    var rect = city.selectAll("rect")
-    .data( d => { return d.values; })
-    .enter().append("rect")
-    .attr("y", height)
-    .attr("width", x0.bandwidth())
-    .attr("height", 0);
-
-    let drawGroupedBars = () => {
-      rect.transition()
-      .duration(500)
-      .delay( (d, i) => { return i * 10; })
-      .attr("x", d => { return x1(d.country); })
-      .attr("y", d => { return y(d.sum_poll); })
-      .attr("width", x1.bandwidth())
-      .attr("height", d => { return height - y(d.sum_poll); })
-      .attr("fill", d => { return z(d.country); });
-    }
-
-    let drawAxis = () => {
-      g.append("g")
-      .attr("class", "axis")
+  // add axis
+  svg.append("g")
+      .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x0));
+      .call(xAxis)
+    .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-.8em")
+      .attr("dy", "-.55em")
+      .attr("transform", "rotate(-90)" );
 
-      g.append("g")
-      .attr("class", "axis")
-      .call(d3.axisLeft(y).ticks(null, "s"))
-      .append("text")
-      .attr("x", 2)
-      .attr("y", y(y.ticks().pop()) + 0.5)
-      .attr("dy", "0.32em")
-      .attr("fill", "#000")
-      .attr("font-weight", "bold")
-      .attr("text-anchor", "start")
-      .text("Pollution");
-    }
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 5)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Frequency");
 
-    let drawLegend = (data) => {
-      var legend = g.append("g")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", 10)
-      .attr("text-anchor", "end")
-      .selectAll("g")
-      .data(data)
-      .enter().append("g")
-      .attr("transform", (d, i) => { return "translate(0," + i * 20 + ")"; });
 
-      legend.append("rect")
-      .attr("x", width - 19)
-      .attr("width", 19)
-      .attr("height", 19)
-      .attr("fill", z);
+  // Add bar chart
+  svg.selectAll("bar")
+      .data(current)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.city); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.current.pollution.aqius); })
+      .attr("height", function(d) { return height - y(d.current.pollution.aqius); });
 
-      legend.append("text")
-      .attr("x", width - 24)
-      .attr("y", 9.5)
-      .attr("dy", "0.32em")
-      .text( d => { return d; });
-    }
+});
 
-    drawGroupedBars();
-    drawAxis();
-    drawLegend(cityList);
+</script>
 
-    d3.selectAll("input").on("change", change);
-
-    var timeout = setTimeout( () => {
-      d3.select("input[value=\"grouped\"]").property("checked", true).each(change);
-    }, 2000);
-
-    function change() {
-      clearTimeout(timeout);
-      if (this.value === "grouped") transitionGrouped();
-      else transitionStacked();
-    }
-
-    function transitionGrouped() {
-
-      rect.transition()
-      .duration(500)
-      .delay( (d, i) => { return i * 10; })
-      .attr("x", d => { return x1(d.country); })
-      .attr("width", x1.bandwidth())
-      .transition()
-      .attr("y", d => { return y(d.sum_poll); })
-      .attr("height", d => { return height - y(d.sum_poll); });
-    }
-
-    function transitionStacked() {
-
-      rect.transition()
-      .duration(500)
-      .delay( (d, i) => { return i * 10; })
-      .attr("y", d => { return y(d.sum_poll); })
-      .attr("height", d => { return height - y(d.sum_poll); })
-      .transition()
-      .attr("x", d => { return x0(d.country); })
-      .attr("width", x0.bandwidth());
-    }
-
-  });
-
-  </script>
 </body>
