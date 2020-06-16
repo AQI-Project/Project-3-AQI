@@ -9,7 +9,7 @@
   }
 
   .bar:hover{
-    fill: brown;
+    fill: gray;
   }
 
 	.axis {
@@ -27,12 +27,12 @@
 </head>
 
 <body>
-	
+<div id="drop" align=right></div>
 <script src="https://d3js.org/d3.v3.min.js"></script>
 
 <script>
 // set the dimensions of the canvas
-var margin = {top: 20, right: 20, bottom: 70, left: 40},
+var margin = {top: 70, right: 180, bottom: 100, left: 180},
     width = 2000 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
 
@@ -58,7 +58,7 @@ var yAxis = d3.svg.axis()
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-  .append("g")
+    .append("g")
     .attr("transform", 
           "translate(" + margin.left + "," + margin.top + ")");
 
@@ -73,16 +73,30 @@ d3.json("data.json", function(error, data) {
   data.forEach(function(element) {
     dataY.push(element.data);
 });
+
+  var elements = Object.keys(dataY[0])
+		.filter(function(d){
+			return ((d != "location") & (d != "current"));
+    });
+  console.log(elements);
+
+  var selection = elements[0];
+  console.log(selection);
+
+
+
   var current = dataY.filter(function(d){return d.current.pollution != null;});
   console.log(current);
 
     current.forEach(function(d) {
         d.city = d.city;
+        d.state = d.state;
+        d.country = d.country;
         d.current.pollution.aqius = +d.current.pollution.aqius;
     });
 	
   // scale the range of the data
-  x.domain(current.map(function(d) { return d.city; }));
+  x.domain(current.map(function(d) { return d[selection]; }));
   y.domain([0, d3.max(current, function(d) { return d.current.pollution.aqius; })]);
 
   // add axis
@@ -90,7 +104,7 @@ d3.json("data.json", function(error, data) {
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis)
-    .selectAll("text")
+      .selectAll("text")
       .style("text-anchor", "end")
       .attr("dx", "-.8em")
       .attr("dy", "-.55em")
@@ -99,23 +113,80 @@ d3.json("data.json", function(error, data) {
   svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
-    .append("text")
+      .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 5)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("Frequency");
+      .text("Pollution (AQIUS)");
 
 
   // Add bar chart
   svg.selectAll("bar")
       .data(current)
-    .enter().append("rect")
+      .enter().append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return x(d.city); })
+      .attr("x", function(d) { return x(d[selection]); })
       .attr("width", x.rangeBand())
       .attr("y", function(d) { return y(d.current.pollution.aqius); })
       .attr("height", function(d) { return height - y(d.current.pollution.aqius); });
+
+  var selector = d3.select("#drop")
+    .append("select")
+    .attr("id","dropdown")
+    .on("change", function(d){
+    selection = document.getElementById("dropdown");
+    
+    y.domain([0, d3.max(current, function(d){
+      return +d.current.pollution.aqius;})]);
+    x.domain(current.map(function(d){
+      return d[selection.value];}));
+    
+      yAxis.scale(y);
+      xAxis.scale(x);
+
+      d3.selectAll(".rectangle")
+          .transition()
+          .attr("height", function(d){
+      return height - y(+d[selection.value]);
+    })
+    .attr("x", function(d, i){
+      return x(d[selection.value]);
+    })
+    .attr("y", function(d){
+      return y(+d[selection.value]);
+    })
+          .ease("linear")
+          .select("title")
+          .text(function(d){
+            return d[selection.value] + " : " + d.current.pollution.aqius;
+          });
+  
+        d3.selectAll("g.y.axis")
+          .transition()
+          .call(yAxis);
+        d3.selectAll("g.x.axis")
+          .attr("transform", "translate(0," + height + ")")
+           .call(xAxis)
+        	 .selectAll("text")
+    			 .style("font-size", "8px")
+      	   .style("text-anchor", "end")
+      	   .attr("dx", "-.8em")
+      	   .attr("dy", "-.55em")
+      	   .attr("transform", "rotate(-90)" );
+
+      });
+
+selector.selectAll("option")
+  .data(elements)
+  .enter().append("option")
+  .attr("value", function(d){
+    return d;
+  })
+  .text(function(d){
+    return d;
+  })
+
 
 });
 
