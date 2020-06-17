@@ -96,7 +96,10 @@ console.log(dataY[0].current);
 	
   // scale the range of the data
   x.domain(current.map(function(d) { return d.city; }));
-  y.domain([0, d3.max(current, function(d) { return (d.current.weather[selection]) ; })]);
+  y.domain([d3.min(current, function(d) { 
+    return (d.current.weather[selection]);}), d3.max(current, function(d) { 
+      return (d.current.weather[selection]) ; })])
+    
 
   // add axis
   svg.append("g")
@@ -117,7 +120,7 @@ console.log(dataY[0].current);
       .attr("y", 5)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("Pollution");
+      .text("Weather");
 
   // Add bar chart
   svg.selectAll("bar")
