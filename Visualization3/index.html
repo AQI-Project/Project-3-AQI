@@ -38,8 +38,7 @@ var margin = {top: 100, right: 180, bottom: 100, left: 180},
 
 
 // set the ranges
-var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
-
+var x = d3.scale.ordinal().rangeRoundBands([0, width], .1);
 var y = d3.scale.linear().range([height, 0]);
 
 // define the axis
@@ -59,8 +58,7 @@ var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
-    .attr("transform", 
-          "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
 // load the data
@@ -74,30 +72,31 @@ d3.json("data.json", function(error, data) {
     dataY.push(element.data);
 });
 
-  var elements = Object.keys(dataY[0])
+console.log(dataY[0].current);
+
+  var elements = Object.keys(dataY[0].current.weather)
 		.filter(function(d){
-			return ((d != "location") & (d != "current"));
+			return ((d != "ic") & (d != "ts") & (d != "wd"));
     });
   console.log(elements);
 
   var selection = elements[0];
   console.log(selection);
 
-
-
-  var current = dataY.filter(function(d){return d.current.pollution != null;});
+  var current = dataY.filter(function(d){return d.current.weather != null;});
   console.log(current);
 
     current.forEach(function(d) {
         d.city = d.city;
-        d.state = d.state;
-        d.country = d.country;
-        d.current.pollution.aqius = +d.current.pollution.aqius;
+        d.current.weather.pr = +d.current.weather.pr;
+        d.current.weather.hu = +d.current.weather.hu;
+        d.current.weather.tp = +d.current.weather.tp;
+        d.current.weather.ws = +d.current.weather.ws;
     });
 	
   // scale the range of the data
-  x.domain(current.map(function(d) { return d[selection]; }));
-  y.domain([0, d3.max(current, function(d) { return d.current.pollution.aqius; })]);
+  x.domain(current.map(function(d) { return d.city; }));
+  y.domain([0, d3.max(current, function(d) { return (d.current.weather[selection]) ; })]);
 
   // add axis
   svg.append("g")
@@ -118,18 +117,17 @@ d3.json("data.json", function(error, data) {
       .attr("y", 5)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("Pollution (AQIUS)");
-
+      .text("Pollution");
 
   // Add bar chart
   svg.selectAll("bar")
       .data(current)
       .enter().append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return x(d[selection]); })
+      .attr("x", function(d) { return x(d.city); })
       .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.current.pollution.aqius); })
-      .attr("height", function(d) { return height - y(d.current.pollution.aqius); });
+      .attr("y", function(d) { return y(d.current.weather[selection]); })
+      .attr("height", function(d) { return height - y(d.current.weather[selection]); });
 
   var selector = d3.select("#drop")
     .append("select")
@@ -138,28 +136,28 @@ d3.json("data.json", function(error, data) {
     selection = document.getElementById("dropdown");
     
     y.domain([0, d3.max(current, function(d){
-      return +d.current.pollution.aqius;})]);
+      return +d.current.weather[selection.value];})]);
     x.domain(current.map(function(d){
-      return d[selection.value];}));
+      return d.city;}));
     
       yAxis.scale(y);
       xAxis.scale(x);
 
-      d3.selectAll(".rectangle")
+      d3.selectAll("rect")
           .transition()
           .attr("height", function(d){
-      return height - y(+d[selection.value]);
-    })
-    .attr("x", function(d, i){
-      return x(d[selection.value]);
-    })
-    .attr("y", function(d){
-      return y(+d[selection.value]);
-    })
+            return height - y(d.current.weather[selection.value]);
+          })
+          .attr("x", function(d, i){
+            return x(d.city);
+          })
+          .attr("y", function(d){
+            return y(+d.current.weather[selection.value]);
+          })
           .ease("linear")
           .select("title")
           .text(function(d){
-            return d[selection.value] + " : " + d.current.pollution.aqius;
+            return d.city + " : " + d.current.weather[selection.value];
           });
   
         d3.selectAll("g.y.axis")
@@ -186,7 +184,6 @@ selector.selectAll("option")
   .text(function(d){
     return d;
   })
-
 
 });
 
