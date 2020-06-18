@@ -12,20 +12,20 @@ var tileLayer = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}
     accessToken: API_KEY
   }).addTo(myMap);
 
-function chooseColor(aqi) {
-  switch (aqi) {
-  case "aqius" < 15:
-    return "blue";
-  case "aqius" < 31:
-    return "green";
-  case "aqius" < 49:
-    return "yellow";
-  case "aqius" < 99:
-    return "orange";
-  default:
-    return "red";
-  }
-}
+// function chooseColor(aqi) {
+//   switch (aqi) {
+//   case "aqius" < 15:
+//     return "blue";
+//   case "aqius" < 31:
+//     return "green";
+//   case "aqius" < 49:
+//     return "yellow";
+//   case "aqius" < 99:
+//     return "orange";
+//   default:
+//     return "red";
+//   }
+// }
 
 d3.json("./static/js/data.json", function(data) {
   
