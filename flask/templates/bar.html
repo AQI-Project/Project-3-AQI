@@ -28,6 +28,26 @@
 	  shape-rendering: crispEdges;
 	}
 
+  #bar {
+    padding-left: 100px !important;
+    margin-left: 0!important;
+    margin-top:20px;
+  }
+
+  svg {
+    padding-left:0!important;
+    margin-left: 0!important;
+  }
+
+  g {
+    margin-left: 0!important;
+    padding-left:0!important;
+  }
+
+  nav {
+    width:1880px;
+  }
+
 	</style>
 </head>
 
@@ -46,7 +66,7 @@
               Plots
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="http://localhost:5000/getmyfiles/bar.html" target="_blank">Bar Graph</a>
+                <a class="dropdown-item" href="http://localhost:5000/getmygraph/bar.html" target="_blank">Bar Graph</a>
                 <a class="dropdown-item" href="Humidy.html" target="_blank">Humidity</a>
                 <a class="dropdown-item" href="Cloudiness.html" target="_blank">Cloudiness</a>
                 <a class="dropdown-item" href="Wind Speed.html" target="_blank">Wind Speed</a>
@@ -56,14 +76,14 @@
               <a class="nav-link" href="comparison.html">Comparisons </a>
             </li> -->
             <li class="nav-item">
-              <a class="nav-link" target="_blank" href="livedata">Live Data</a>
+              <a class="nav-link" target="_blank" href="http://localhost:5000/livedata">Live Data</a> <!--from localhost-->
             </li>
           </ul>
       </div>
     </div>  
 </nav>
-<div>
-  <div id="drop" align=right></div>
+<div class="container" id = 'bar'>
+  <div id="drop" align=left></div>
 </div>
 
 
@@ -97,6 +117,8 @@ var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
+    .attr('class','img-fluid')
+    .style('padding-left','0px')
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
