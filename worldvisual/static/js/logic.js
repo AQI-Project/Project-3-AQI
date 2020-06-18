@@ -17,7 +17,7 @@ var layers = {
 
 // Create the map with our layers
 var map = L.map("map", {
-  center: [43.6532, -79.3832],
+  center: [43.6532, -20.3832],
   zoom: 3,
   layers: [
     layers.GOOD,
@@ -125,10 +125,12 @@ d3.json("./static/js/data.json", function(data) {
     HAZARDOUS: 0
   };
 
+  // for every point in the dataset, get the locations for the markers and the pollution value to determine color of the marker
   current.forEach(function(d) {
     d.location = d.location;
     d.current.pollution.aqius = +d.current.pollution.aqius;
     
+    // define the pollution conditions based on the aqius values
     if (d.current.pollution.aqius <= 15) {
       aqiStatusCode = "GOOD";
     }
@@ -148,52 +150,17 @@ d3.json("./static/js/data.json", function(data) {
     // Update the aqi count
     aqiCount[aqiStatusCode]++;
 
-    // console.log(icons['MODERATE'])
+    // Create a new marker with the appropriate icon and coordinates
     var newMarker = L.marker([d.location.coordinates[1], d.location.coordinates[0]], {
       icon: icons[aqiStatusCode]
     });
 
-      //   // Create a new marker with the appropriate icon and coordinates
-  //   // Add the new marker to the appropriate layer
-  newMarker.addTo(layers[aqiStatusCode]);
+    // Add the new marker to the appropriate layer
+    newMarker.addTo(layers[aqiStatusCode]);
 
-  // Bind a popup to the marker that will  display on click. This will be rendered as HTML
-  newMarker.bindPopup(d.city + "," + d.country+ "<br> AQI: " + d.current.pollution.aqius + "<br>" + "AQI Status :"+ aqiStatusCode);
+    // Bind a popup to the marker that will  display on click. This will be rendered as HTML
+    newMarker.bindPopup(d.city + "," + d.country+ "<br> AQI: " + d.current.pollution.aqius + "<br>" + "AQI Status :"+ aqiStatusCode);
   });
-  // Call the updateLegend function, which will... update the legend!
-  // updateLegend(aqiCount);
-
-
-  function getColor(d) {
-    return d > 1000  ? 'red' :
-           d > 99  ? 'red' :
-           d > 49  ? 'orange' :
-           d > 31   ? 'yellow' :
-           d > 15   ? 'green' :
-           d > 0   ? 'blue' :
-                      'blue';
-}
-
-
-  var legend = L.control({position: 'bottomright'});
-
-  legend.onAdd = function (map) {
-
-    var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 15, 31, 49, 99, 1000],
-        labels = [aqiStatusCode];
-
-    // loop through our density intervals and generate a label with a colored square for each interval
-    for (var i = 0; i < grades.length; i++) {
-        div.innerHTML +=
-            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-    }
-
-    return div;
-};
-
-legend.addTo(map);
 });
 
 
