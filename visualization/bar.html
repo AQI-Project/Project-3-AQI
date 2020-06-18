@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+	<style>
+
+  .bar{
+    fill: steelblue;
+  }
+
+  .bar:hover{
+    fill: gray;
+  }
+
+	.axis {
+	  font: 10px sans-serif;
+	}
+
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+
+	</style>
+</head>
+
+<body>
+<div id="drop" align=right></div>
+<div>test</div>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<script>
+// set the dimensions of the canvas
+var margin = {top: 100, right: 180, bottom: 100, left: 180},
+    width = 2000 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+
+// set the ranges
+var x = d3.scale.ordinal().rangeRoundBands([0, width], .1);
+var y = d3.scale.linear().range([height, 0]);
+
+// define the axis
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(10);
+
+
+// add the SVG element
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+// load the data
+d3.json("data.json", function(error, data) {
+
+  var data = data.filter(function(d){return d.status === 'success';});
+  console.log(data);
+
+  var dataY=[];
+  data.forEach(function(element) {
+    dataY.push(element.data);
+});
+
+console.log(dataY[0].current);
+
+  var elements = Object.keys(dataY[0].current.weather)
+		.filter(function(d){
+			return ((d != "ic") & (d != "ts") & (d != "wd"));
+    });
+  console.log(elements);
+
+  var selection = elements[0];
+  console.log(selection);
+
+  var current = dataY.filter(function(d){return d.current.weather != null;});
+  console.log(current);
+
+    current.forEach(function(d) {
+        d.city = d.city;
+        d.current.weather.pr = +d.current.weather.pr;
+        d.current.weather.hu = +d.current.weather.hu;
+        d.current.weather.tp = +d.current.weather.tp;
+        d.current.weather.ws = +d.current.weather.ws;
+    });
+	
+  // scale the range of the data
+  x.domain(current.map(function(d) { return d.city; }));
+  y.domain([d3.min(current, function(d) { 
+    return (d.current.weather[selection]);}), d3.max(current, function(d) { 
+      return (d.current.weather[selection]) ; })])
+    
+
+  // add axis
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-.8em")
+      .attr("dy", "-.55em")
+      .attr("transform", "rotate(-90)" );
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 5)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Weather");
+
+  // Add bar chart
+  svg.selectAll("bar")
+      .data(current)
+      .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.city); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.current.weather[selection]); })
+      .attr("height", function(d) { return height - y(d.current.weather[selection]); });
+
+  var selector = d3.select("#drop")
+    .append("select")
+    .attr("id","dropdown")
+    .on("change", function(d){
+    selection = document.getElementById("dropdown");
+    
+    y.domain([0, d3.max(current, function(d){
+      return +d.current.weather[selection.value];})]);
+    x.domain(current.map(function(d){
+      return d.city;}));
+    
+      yAxis.scale(y);
+      xAxis.scale(x);
+
+      d3.selectAll("rect")
+          .transition()
+          .attr("height", function(d){
+            return height - y(d.current.weather[selection.value]);
+          })
+          .attr("x", function(d, i){
+            return x(d.city);
+          })
+          .attr("y", function(d){
+            return y(+d.current.weather[selection.value]);
+          })
+          .ease("linear")
+          .select("title")
+          .text(function(d){
+            return d.city + " : " + d.current.weather[selection.value];
+          });
+  
+        d3.selectAll("g.y.axis")
+          .transition()
+          .call(yAxis);
+        d3.selectAll("g.x.axis")
+          .attr("transform", "translate(0," + height + ")")
+           .call(xAxis)
+        	 .selectAll("text")
+    			 .style("font-size", "8px")
+      	   .style("text-anchor", "end")
+      	   .attr("dx", "-.8em")
+      	   .attr("dy", "-.55em")
+      	   .attr("transform", "rotate(-90)" );
+
+      });
+
+selector.selectAll("option")
+  .data(elements)
+  .enter().append("option")
+  .attr("value", function(d){
+    return d;
+  })
+  .text(function(d){
+    return d;
+  })
+
+});
+
+</script>
+
+</body>

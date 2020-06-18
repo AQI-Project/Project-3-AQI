@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!--This gives the browser instructions on how to control the page's dimensions and scaling.
+  The width=device-width part sets the width of the page to follow the screen-width of the device (which will vary depending on the device).
+  The initial-scale=1.0 part sets the initial zoom level when the page is first loaded by the browser.-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Weather Data</title>
+  <!-- <link rel="stylesheet" href="final.css"> -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.min.js"></script>
+  <style>
+
+    #city {
+      width: 300px;
+      height: 40px;
+      margin-left: 10px;
+    }
+
+    #table-area {
+      margin-right: -10px;
+    }
+
+    #bbb {
+      padding-left: 50px;
+      padding-right: 50px;
+    }
+
+
+  </style>
+  
+
+</head>
+
+
+<body data-gr-c-s-loaded="true" class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="bbb">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="landing page.html">Latitude</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+              <ul class="navbar-nav ">
+                <li class="nav-item dropdown active">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Plots
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="bar.html" target="_blank">Bar Graph</a>
+                    <a class="dropdown-item" href="Humidy.html" target="_blank">Humidity</a>
+                    <a class="dropdown-item" href="Cloudiness.html" target="_blank">Cloudiness</a>
+                    <a class="dropdown-item" href="Wind Speed.html" target="_blank">Wind Speed</a>
+                  </div>
+                </li>
+                <!-- <li class="nav-item ">
+                  <a class="nav-link" href="comparison.html">Comparisons </a>
+                </li> -->
+                <li class="nav-item">
+                  <a class="nav-link" target="_blank" href="http://localhost:5000/">Live Data</a>
+                </li>
+              </ul>
+          </div>
+        </div>  
+    </nav>
+    <div class="box box-content">
+      <div class="container">
+        <div class="row">
+            <div class="table-responsive-lg">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <h1>Data</h1>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                      
+                      <form class="form-inline justify-content-end" id="form">
+                        <!-- <label for="date">Enter a city</label> -->
+                        <input class="form-control mr-sm-2" id="city" type="text" placeholder="Your country, city or state" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="filter-btn">Search</button>
+                      </form>
+                    </div>
+                </nav>
+                <hr>
+                    <p>The following table includes all of the data used for plotting during this project.</p>
+                
+                  <div id="table-area" class="table-responsive-md">
+                    <table id="ufo-table" class="table table-striped table-hover">
+                      <thead class="table-info">
+                        <tr class="text-left">
+                          <th class="table-head" scope="col">city</th>
+                          <th class="table-head" scope="col">state</th>
+                          <th class="table-head" scope="col">country</th>
+                          <th class="table-head" scope="col">latitude</th>
+                          <th class="table-head" scope="col">longitude</th>
+                          <th class="table-head" scope="col">current weather</th>
+                          <th class="table-head" scope="col">current pollution</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                      
+                    </table>
+                  </div>
+
+            </div>
+        </div>
+      </div>
+    </div>
+    <div id="hidden2">
+      <hr>
+      <h3>IQAir</h3>
+        <p>Copy Right</p>
+        <!-- <p>Trilogy Education Services &#169; 2019 All right reserved</p>    -->
+    </div>
+
+    
+      
+
+
+
+
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.js"></script>
+  <!-- <script src="static/js/data.js"></script> -->
+  <!-- <script src="static/js/bonus.js"></script> -->
+  <script src="static/js/bonus2.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>          
+      
+
+
+</body>
+</html>

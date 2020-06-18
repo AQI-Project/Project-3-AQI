@@ -1,0 +1,237 @@
+/*
+
+// Extra small devices (portrait phones, less than 576px)
+@media (max-width: 575.98px) { ... }
+
+// Small devices (landscape phones, less than 768px)
+@media (max-width: 767.98px) { ... }
+
+// Medium devices (tablets, less than 992px)
+@media (max-width: 991.98px) { ... }
+
+// Large devices (desktops, less than 1200px)
+@media (max-width: 1199.98px) { ... }
+
+// Extra large devices (large desktops)
+// No media query since the extra-large breakpoint has no upper bound on its width
+
+*/
+
+
+/*visibility: hidden;hidden heading still takes up space.
+display: none; does not take up any space.*/
+
+
+#inputsize {
+  width: 150px;
+  height: 40px;
+  margin-left: 10px;
+}
+
+aside {
+  background-color: white;
+  padding-top: 10px;
+  border-left: 10px solid #f8f9fa!important;}  /*This rule overrides all previous styling rules ​*/
+
+#temp {
+  width:300px;
+  height:300px;
+  object-fit: cover;/*The replaced content is sized to maintain its aspect ratio while filling the element's entire content box. The object will be clipped to fit*/
+  margin-right: 30px;
+}
+
+.goushi{
+  flex-wrap: wrap;
+  /*object-fit: contain; The replaced content is scaled to maintain its aspect ratio while fitting within the element's content box*/
+}
+
+
+@media (max-width: 767.98px) {
+  aside {
+    background-color: white;
+    padding-top: 10px;
+    border-top: 10px solid #f8f9fa!important;
+    border-left: 0px solid #f8f9fa!important;}
+  
+
+  #navbarSupportedContent {
+    justify-content: flex-start!important;
+    margin-left: 20px;
+  }
+
+.btn-primary{
+  background-color: #119292!important;/*!important change color*/
+  border-color: #e3fdfcb2!important;
+  border-radius: 0px!important;
+  text-align: justify;
+  height: 30px;
+  width: auto;
+}
+
+.navbar-light{
+  background-color: #00ffd5e1!important;
+}
+
+.btn-group{
+  flex-direction: column;
+  width: 150%;
+  margin-top: 15px;
+  border: #00ffd5e1!important;
+  padding: 0;
+}
+
+#splitbutton{
+  border: none;
+}
+
+#navbarSupportedContent{
+  background-color:#e3fdfcb2;
+  margin: 0px;
+  padding-left: 20px;
+  text-align: left;
+}
+
+#hiddenaside{
+  display: none;
+}
+
+#bbb {
+  background-color: #119292!important;
+}
+
+
+
+}/*meDIa*/
+
+@media (max-width: 575.98px) {
+
+  #hidden {
+
+    display:block!important;
+    }
+    
+    #hidden2{
+      display:block!important;
+      margin-left: 30px;
+    }
+    
+    .box{
+      display:none;
+    }
+
+}
+
+
+
+main {
+  background-color: white;
+  padding-left: 30px!important;
+}
+
+figure, #big {
+  width: 250px;
+  height: 250px;
+  margin-bottom: 0px;
+  margin-right: 20px;
+  padding-bottom: 0px;
+}
+
+
+div.row {
+    margin-top: 5px;
+}
+
+div.clearfix {
+    margin-top: 30px;
+}
+
+.post{
+    text-align: justify;
+    line-height: 1.8em;
+    font-size: 16px;
+    margin-top: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.box-left {
+  padding: 20px;
+}
+
+.box-right {
+  padding: 20px;
+}
+
+.clearfix {
+    overflow: auto;
+  }
+  
+.dropdown-item {
+    color: #212529;
+    font-weight: 400;
+}
+
+#dropdown{
+  padding: 10px 5px 10px 5px;
+  color: black;
+}
+
+
+.dropdown-menu{
+    display: block;
+}
+
+h1 {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  color:#117a8b;
+  font-weight: 500;
+  font-size: 28px;
+  
+}
+
+h2 {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+	font-size: 24px;
+  text-align: center;
+  color:#117a8b;  
+}
+
+h3 {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-weight: 200;
+  text-align: center;
+  color:#117a8b; 
+} 
+
+.container{
+  background-color: white;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  margin-bottom: 40px;
+}
+
+#cheader{
+  padding-left: 40px ;
+  padding-right: 40px ;
+}
+
+.box-content{
+  /*background-color: white;*/
+  margin-left: 50px;
+  margin-right: 50px;
+  padding-top: 30px;
+}
+
+.sss{
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+#hidden {
+  display:none;
+
+}
+
+#hidden2{
+  display:none;
+}
