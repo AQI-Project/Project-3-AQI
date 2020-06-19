@@ -160,7 +160,16 @@ d3.json("./static/js/data.json", function(data) {
 
     // Bind a popup to the marker that will  display on click. This will be rendered as HTML
     newMarker.bindPopup(d.city + "," + d.country+ "<br> AQI: " + d.current.pollution.aqius + "<br>" + "AQI Status :"+ aqiStatusCode);
+
+ 
   });
 });
 
+// zoom center and zoom in on click
+map.on('popupopen', function(centerMarker) {
+const zoomLvl = 4;
+var cM = map.project(centerMarker.popup._latlng);
+cM.y -= centerMarker.popup._container.clientHeight/zoomLvl
+map.setView(map.unproject(cM),zoomLvl, {animate: true});
+});
 
