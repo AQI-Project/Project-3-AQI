@@ -1,5 +1,5 @@
 
-d3.json("data.json", function(data) {  //getmyfiles/
+d3.json("getmyfiles/data.json", function(data) {  
   // console.log(data);
 
 

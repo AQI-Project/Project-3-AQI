@@ -23,7 +23,7 @@ def home():
     return render_template("alldata.html")
                                       # in js file, the d3.json should also change
 @app.route("/getmygraph/<path:path>") #localhost:getmyfiles/ the file(which in templates)
-def send_bar(path):
+def send_bar(path):                   # also can be called path:path
     print(path)
     return send_from_directory('templates/', path) 
 
