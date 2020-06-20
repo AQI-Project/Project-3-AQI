@@ -44,9 +44,9 @@
     padding-left:0!important;
   }
 
-  /* nav {
+  nav {
     width:1880px;
-  } */
+  }
 
 	</style>
 </head>
@@ -100,7 +100,7 @@
 
 // set the dimensions and margins of the graph
 var margin = {top: 50, right: 30, bottom: 60, left: 60},
-    width = 1000- margin.left - margin.right,
+    width = 1400- margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
@@ -129,7 +129,7 @@ svg.append("text")
     .attr("text-anchor", "end")
     .attr("x", width/2 + margin.left)
     .attr("y", height + margin.top)
-    .text("Humidity %");
+    .text("Current Wind Speed (m/s)");
 
 // Y axis label:
 svg.append("text")
@@ -244,7 +244,7 @@ console.log(dataY[0].current);
     .enter()
     .append("circle")
       //.attr("x", function (d) { return x(d.xaxis); } )
-      .attr("cx", function(d) { return x(d.current.weather.hu); })
+      .attr("cx", function(d) { return x(d.current.weather.ws); })
       //.attr("y", function (d) { return y(d.yaxis); } )
       .attr("cy", function(d) { return y(d.current.pollution.aqius); })
       .attr("r", 3.5)
@@ -257,7 +257,7 @@ console.log(dataY[0].current);
 
   // new X axis
   x.domain([0, d3.max(current, function(d){
-    return d.current.weather.hu;})])
+    return d.current.weather.ws;})])
   svg.select(".myXaxis")
     .transition()
     .duration(2000)
@@ -268,7 +268,7 @@ console.log(dataY[0].current);
     .transition()
     .delay(function(d,i){return(i*3)})
     .duration(2000)
-    .attr("cx", function(d) { return x(d.current.weather.hu); })
+    .attr("cx", function(d) { return x(d.current.weather.ws); })
     .attr("cy", function(d) { return y(d.current.pollution.aqius); })
 });
 </script>
