@@ -3,7 +3,7 @@ from flask_pymongo import PyMongo
 import scrape_weather
 
 # Create an instance of Flask
-app = Flask(__name__, static_url_path="")
+app = Flask(__name__, static_url_path="") #can be used to specify a different path for the static files on the web. Defaults to the name of the static_folder folder.
 
 # Use PyMongo to establish Mongo connection
 mongo = PyMongo(app, uri="mongodb://localhost:27017/weather_app")
@@ -22,10 +22,15 @@ def livedata():
 def home():
     return render_template("alldata.html")
                                       
-@app.route("/getmygraph/<path:path>") 
+@app.route("/getmygraph/<path:path>")
 def send_bar(path):
     print(path)
     return send_from_directory('templates/', path) 
+
+@app.route("/getmygraph2/<path:path>")
+def send_bar2(path):
+    print(path)
+    return send_from_directory('templates/', path)
 
 @app.route("/getmyfiles/<path:path>")
 def send_js(path):

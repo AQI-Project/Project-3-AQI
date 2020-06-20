@@ -23,6 +23,7 @@
     #cao{
       padding: 15px;
     }
+
     figcaption{
       font-size: 1.05em!important;
       font-weight: bold;
@@ -31,16 +32,64 @@
     #xxx{
       padding: 5px;
     }
+
+    #table{
+      width:875px!important;
+    }
+
+    #sb{
+      position:relative;
+      z-index:2;
+
+    }
+
+    svg{
+      position: absolute;
+      z-index:3;  /* z-index > #sb number*/
+      background-image: url("img_tree.gif")
+    }
+
+    #p{
+      background-image: url("https://media.giphy.com/media/Za2EoIrGVyUapuAQtv/giphy.gif");
+      background-size: 100% 100%;
+    }
+
+    #q{
+      transform:translate(630px,0px);
+      background-image: url("https://media.giphy.com/media/Y4sXiHz3LAEOslZASD/giphy.gif");
+      background-size: 100% 100%;
+      /* background-size: cover; */
+    }
+
+    @media (min-width: 1199.98px){
+      #q{transform:translate(810px,0px);}
+    }
+
   </style>
+
 </head>
 
 <body data-gr-c-s-loaded="true" class="bg-light">
   <div class="container">
-    <div class="jumbotron text-center">
-      <h1>Explore the air quality</h1>
-      <p></p>
-      <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data!</a></p><!--????-->
+    <div>
+      <!-- <img src="https://media.giphy.com/media/xT9IgFGurevfWGztkI/giphy.gif" width="100" height="140"> -->
+      <svg width="300" height="246" id='p'>
+        <!-- <img src="https://media.giphy.com/media/xT9IgFsGfQJ6iwlCX6/giphy.gif" alt="Paris"> -->
+        <!-- <rect  x="0" y="0" width="250" height="228"  /> -->
+      </svg>
+
+      <svg width="300" height="246" id='q'>
+        <!-- <rect x="680" y="0" width="250" height="228" fill="green" /> -->
+      </svg>
+
+      <div class="jumbotron text-center" id='sb'>
+        <h2>Explore the air quality</h2>
+        <p></p>
+        <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data!</a></p><!--????-->
+      </div>
     </div>
+    
+    
     <div class="container shadow p-3 mb-5 bg-white rounded">
       <h3>Do weather and climate determine where COVID-19 occurs?</h3>
       <p>{{weather.q1}}</p>
@@ -52,7 +101,7 @@
       <h3>Live city ranking</h3>
       <h4>Cities with high air pollution (AQI)</h4>
 
-      <table class="table table-striped table-hover">
+      <table class="table table-striped table-hover" id='table'>
         <thead class="table-info">
           <tr class="text-left">
             <th class="align-middle" scope="col">Country</th>

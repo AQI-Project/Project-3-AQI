@@ -7,7 +7,7 @@
   The initial-scale=1.0 part sets the initial zoom level when the page is first loaded by the browser.-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Weather Data</title>
+  <title>AQI Data</title>
   <!-- <link rel="stylesheet" href="final.css"> -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -22,11 +22,16 @@
 
     #table-area {
       margin-right: -10px;
+      width:1000px;
     }
 
     #bbb {
       padding-left: 50px;
       padding-right: 50px;
+    }
+
+    #table{
+      width:960px;
     }
 
 
@@ -50,10 +55,10 @@
                   Plots
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="http://127.0.0.1:5500/flask/templates/bar.html" target="_blank">Bar Graph</a>
-                    <a class="dropdown-item" href="Humidy.html" target="_blank">Humidity</a>
-                    <a class="dropdown-item" href="Cloudiness.html" target="_blank">Cloudiness</a>
-                    <a class="dropdown-item" href="Wind Speed.html" target="_blank">Wind Speed</a>
+                    <a class="dropdown-item" href="getmygraph2/marker.html" target="_blank">Air Quality Visualization</a>
+                    <a class="dropdown-item" href="getmygraph/bar.html" target="_blank">Bar Graph</a>
+                    <a class="dropdown-item" href="getmygraph/scatter_hu.html" target="_blank">Humidity</a>
+                    <a class="dropdown-item" href="getmygraph/scatter_ws.html" target="_blank">Wind Speed</a>
                   </div>
                 </li>
                 <!-- <li class="nav-item ">
@@ -87,8 +92,8 @@
                 <hr>
                     <p>The following table includes all of the data used for plotting during this project.</p>
                 
-                  <div id="table-area" class="table-responsive-md">
-                    <table id="ufo-table" class="table table-striped table-hover">
+                  <div id="table-area" class="table-responsive-lg">
+                    <table id="ufo-table" class="table table-striped table-hover" id='table'>
                       <thead class="table-info">
                         <tr class="text-left">
                           <th class="table-head" scope="col">city</th>
@@ -116,25 +121,17 @@
         <!-- <p>Trilogy Education Services &#169; 2019 All right reserved</p>    -->
     </div>
 
-    
-      
-
-
-
-
-
-
 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.js"></script>
   <!--script src="static/js/data.js"></script -->
-  <!-- <script src="static/js/bonus.js"></script> -->
-  <script src="getmyfiles/bonus2.js"></script>
+  <!-- <script src="static/js/bonus2.js"></script>   -->
+  <!-- <script src="getmyfiles/bonus2 copy.js"></script>  -->
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>          
-      
+<script src="getmyfiles/bonus2copy.js"></script>   
 
 
 </body>

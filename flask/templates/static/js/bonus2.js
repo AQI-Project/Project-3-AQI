@@ -1,5 +1,5 @@
 
-d3.json("getmyfiles/data.json", function(data) {
+d3.json("data.json", function(data) {  //getmyfiles/
   // console.log(data);
 
 
@@ -111,8 +111,9 @@ function table(data, tbody){
   };
 
   try {
-    var weather = row.append('td').text(`temperature :${data.current.weather.tp}; humidity:${data.current.weather.hu}; wind speed:${data.current.weather.hu}`);
-    var pollution = row.append('td').text(`AQI:${data.current.pollution.aqius}; main pollutant:${data.current.pollution.mainus}`);
+    // var weather = row.append('td').text(`temperature :${data.current.weather.tp};\n` +`humidity:${data.current.weather.hu};\n`+ `wind speed:${data.current.weather.hu};\n`);
+    var weather = row.append('td').html(`<span class='text-truncate'>temperature :${data.current.weather.tp}</span>;`+'<br/>'+`<span class='text-truncate'>humidity:${data.current.weather.hu}</span>;`+`<br/>`+`<span class='text-truncate'>wind speed:${data.current.weather.hu}</span>;`);
+    var pollution = row.append('td').html(`<span class='text-truncate'>AQI:${data.current.pollution.aqius}</span>;`+`<br/>` +`<span class='text-truncate'>main pollutant:${data.current.pollution.mainus}</span>;`);
 
   } catch(err) {
     var weather = row.append('td').text(null);

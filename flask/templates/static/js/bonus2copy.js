@@ -1,10 +1,15 @@
+// var svgWidth = parseInt(d3.select("#table").style("width"));
+// console.log(svgWidth)
 
-d3.json("getmyfiles/data.json", function(data) {
+console.log('wocao');
+
+d3.json("getmyfiles/data.json", function(data) {  
   // console.log(data);
+  console.log('test');
 
   var tbody = d3.select('tbody');
   var tableData=[];
-  var dataY=[];
+  const dataY=[];
 
   data.forEach(function(x) {
     if (x.status === 'success'){
@@ -19,7 +24,10 @@ d3.json("getmyfiles/data.json", function(data) {
     dataY.push(element.data);
   });
 
-  console.log(dataY);
+  // var current = dataY.filter(function(d){return d.current.pollution != null;});
+  // console.log(current);
+
+  // console.log(dataY);
   function removeTable(){
     d3.select('tbody').html('');
   };
@@ -38,9 +46,9 @@ d3.json("getmyfiles/data.json", function(data) {
   };
   console.log(listName);
 
-  var string = listName.map(i =>`<label for=${i}>Enter a ${i}</label><input class="form-control" id=${i} type="text" >`);
-  var State = d3.select('ul').append('li').attr("class", "filter list-group-item").html(string[1]);
-  var Country = d3.select('ul').append('li').attr("class", "filter list-group-item").html(string[2]);
+  // var string = listName.map(i =>`<label for=${i}>Enter a ${i}</label><input class="form-control" id=${i} type="text" >`);
+  // var State = d3.select('ul').append('li').attr("class", "filter list-group-item").html(string[1]);
+  // var Country = d3.select('ul').append('li').attr("class", "filter list-group-item").html(string[2]);
 
 
   var button = d3.selectAll('#filter-btn');
@@ -49,36 +57,44 @@ d3.json("getmyfiles/data.json", function(data) {
   form.on('submit',runEnter);  //???? why enter does not work 
 
   function runEnter(){
+    console.log('test');
     d3.event.preventDefault();
     removeTable();
     var tbody = d3.select('tbody');
     var inputId = document.getElementsByClassName('form-control'); // =>  array  returns a collection of all elements in the document 
+    
+    console.log(inputId);
     var filteredData = dataY;                                                       
-    for (var i = 0; i < inputId.length; i++) {                       //The Document Object Model (DOM) 
-      var idName = inputId[i].id;    // return to city,state ...
-      var x = d3.select("#" + idName).property("value");
+      // var idName = inputId[i].id;    // return to city,state ...
+      var x = d3.select("#" + 'city').property("value");
       var inputValue = x.toLowerCase().trim();
       console.log(inputValue);
-      if (inputValue !== "") {   // there are table[idName] are undefined
-        // var filteredData = dataY.forEach(table => console.log(typeof(table[idName]))); // return to string
-        var filteredData = filteredData.filter(table => table[idName].toLowerCase().trim() === inputValue);
-      // !!!must use  filteredData = filteredData. after the first loop, it will loop again. otherwise only the last loop result.
-      };
-    };
 
-    // // jump out of loop
-    if (filteredData.length == 0) {
-      d3.select("tbody")
-        .append("tr")
-        .append("td")
-        .attr("colspan", 7)
-        .html("<h4>No Records Found</h4>");
-    };
-    console.log(filteredData);
-    // table(filteredData,tbody);
-    filteredData.forEach(x=>{
-      table(x, tbody);
-    });
+      for (var i = 0; i < 3; i++){
+        var filteredData = dataY.filter(table => table[listName[i]].toLowerCase().trim() === inputValue);
+        if (filteredData.length > 0) {   //return to array
+          filteredData.forEach(x=>{
+            table(x, tbody);
+          });
+            break;  // ?? no break will show ‘not found’  , with break can not find ca
+        }
+        else {continue;}  // with or without this function same result
+      };
+
+      if(inputValue ===''){
+        filteredData.forEach(x=>{
+          table(x, tbody);
+          console.log(x);
+        });
+      }
+      else   // !==''
+        if (filteredData.length == 0){   //  remember filteredData  ????
+          d3.select('tbody')
+            .append('tr')
+            .append('td')
+            .attr('colspan', 7)
+            .html('<h3>No Records Found</h3>');
+        }
 
   }; // runEnter end
 }); // d3.json end
@@ -98,15 +114,17 @@ function table(data, tbody){
   try {
     var latitude = row.append('td').text(Math.round(data.location.coordinates[0] * 1000)/1000);
     var longitude = row.append('td').text(Math.round(data.location.coordinates[1] * 1000)/1000);
-  } catch(err) {
+  } catch(err) { 
     var latitude = row.append('td').text(null);
     var longitude = row.append('td').text(null);
   };
 
-  try {
-    var weather = row.append('td').text(`temperature :${data.current.weather.tp}; humidity:${data.current.weather.hu}; wind speed:${data.current.weather.hu}`);
-    var pollution = row.append('td').text(`AQI:${data.current.pollution.aqius}; main pollutant:${data.current.pollution.mainus}`);
-  } catch(err) {
+  try {     //class='text-truncate'
+    // var weather = row.append('td').text(`temperature :${data.current.weather.tp};\n` +`humidity:${data.current.weather.hu};\n`+ `wind speed:${data.current.weather.hu};\n`);
+    var weather = row.append('td').html(`<span class='text-truncate'>temperature :${data.current.weather.tp} wocao</span>;`+'<br/>'+`<span class='text-truncate'>humidity:${data.current.weather.hu}</span>;`+`<br/>`+`<span class='text-truncate'>wind speed:${data.current.weather.hu}</span>;`);
+    var pollution = row.append('td').html(`<span class='text-truncate'>AQI:${data.current.pollution.aqius}</span>;`+`<br/>` +`<span class='text-truncate'>main pollutant:${data.current.pollution.mainus}</span>;`);
+
+  } catch(err) { 
     var weather = row.append('td').text(null);
     var pollution = row.append('td').text(null);
   };
