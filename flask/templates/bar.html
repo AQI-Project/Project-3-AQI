@@ -4,9 +4,13 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Weather Data</title>
+  <title>AQI Data</title>
 	<style>
 
   .bar{
@@ -44,9 +48,9 @@
     padding-left:0!important;
   }
 
-  nav {
+  /* nav {
     width:1880px;
-  }
+  } */
 
 	</style>
 </head>
@@ -66,10 +70,10 @@
               Plots
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="http://localhost:5000/getmygraph/bar.html" target="_blank">Bar Graph</a>
-                <a class="dropdown-item" href="Humidy.html" target="_blank">Humidity</a>
-                <a class="dropdown-item" href="Cloudiness.html" target="_blank">Cloudiness</a>
-                <a class="dropdown-item" href="Wind Speed.html" target="_blank">Wind Speed</a>
+                  <a class="dropdown-item" href="getmygraph/marker.html" target="_blank">Air Quality Visualization</a>
+                  <a class="dropdown-item" href="getmygraph/bar.html" target="_blank">Bar Graph</a>
+                  <a class="dropdown-item" href="getmygraph/scatter_hu.html" target="_blank">Humidity</a>
+                  <a class="dropdown-item" href="getmygraph/scatter_ws.html" target="_blank">Wind Speed</a>
               </div>
             </li>
             <!-- <li class="nav-item ">
@@ -83,7 +87,7 @@
     </div>  
 </nav>
 <div class="container" id = 'bar'>
-  <div id="drop" align=left></div>
+  <div id="drop2" align=left></div>
 </div>
 
 
@@ -193,11 +197,11 @@ console.log(dataY[0].current);
       .attr("y", function(d) { return y(d.current.weather[selection]); })
       .attr("height", function(d) { return height - y(d.current.weather[selection]); });
 
-  var selector = d3.select("#drop")
+  var selector = d3.select("#drop2")
     .append("select")
-    .attr("id","dropdown")
+    .attr("id","dropdown1")
     .on("change", function(d){
-    selection = document.getElementById("dropdown");
+    selection = document.getElementById("dropdown1");
     
     y.domain([0, d3.max(current, function(d){
       return +d.current.weather[selection.value];})]);

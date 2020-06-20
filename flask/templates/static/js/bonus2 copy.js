@@ -1,7 +1,9 @@
+var svgWidth = parseInt(d3.select("#table").style("width"));
+console.log(svgWidth)
 
 d3.json("getmyfiles/data.json", function(data) {  
   // console.log(data);
-
+  console.log('test');
 
   var tbody = d3.select('tbody');
   var tableData=[];
@@ -20,7 +22,10 @@ d3.json("getmyfiles/data.json", function(data) {
     dataY.push(element.data);
   });
 
-  console.log(dataY);
+  // var current = dataY.filter(function(d){return d.current.pollution != null;});
+  // console.log(current);
+
+  // console.log(dataY);
   function removeTable(){
     d3.select('tbody').html('');
   };
@@ -105,17 +110,17 @@ function table(data, tbody){
   try {
     var latitude = row.append('td').text(Math.round(data.location.coordinates[0] * 1000)/1000);
     var longitude = row.append('td').text(Math.round(data.location.coordinates[1] * 1000)/1000);
-  } catch(err) {
+  } catch(err) { 
     var latitude = row.append('td').text(null);
     var longitude = row.append('td').text(null);
   };
 
-  try {
+  try {     //class='text-truncate'
     // var weather = row.append('td').text(`temperature :${data.current.weather.tp};\n` +`humidity:${data.current.weather.hu};\n`+ `wind speed:${data.current.weather.hu};\n`);
     var weather = row.append('td').html(`<span class='text-truncate'>temperature :${data.current.weather.tp}</span>;`+'<br/>'+`<span class='text-truncate'>humidity:${data.current.weather.hu}</span>;`+`<br/>`+`<span class='text-truncate'>wind speed:${data.current.weather.hu}</span>;`);
     var pollution = row.append('td').html(`<span class='text-truncate'>AQI:${data.current.pollution.aqius}</span>;`+`<br/>` +`<span class='text-truncate'>main pollutant:${data.current.pollution.mainus}</span>;`);
 
-  } catch(err) {
+  } catch(err) { 
     var weather = row.append('td').text(null);
     var pollution = row.append('td').text(null);
   };

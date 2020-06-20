@@ -27,6 +27,11 @@ def send_bar(path):
     print(path)
     return send_from_directory('templates/', path) 
 
+@app.route("/getmygraph2/<path:path>")
+def send_bar2(path):
+    print(path)
+    return send_from_directory('templates/', path)
+
 @app.route("/getmyfiles/<path:path>")
 def send_js(path):
     print(path)
